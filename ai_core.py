@@ -1,64 +1,123 @@
-import streamlit as st
-import pandas as pd
 import os
-import google.generativeai as genai
-from dotenv import load_dotenv
 import json
 import re
-from datetime import datetime
-import pytz
+import pandas as pd
+import google.generativeai as genai
+from dotenv import load_dotenv
 
-# --- Constants ---
-API_KEY_CONFIGURED = "GOOGLE_API_KEY" in os.environ or "st.secrets" in st
+# --- SETUP & CONFIGURATION ---
 
-# --- AI Configuration ---
+load_dotenv()
+API_KEY_CONFIGURED = "GOOGLE_API_KEY" in os.environ
 if API_KEY_CONFIGURED:
-    try:
-        # Try to get key from Streamlit's secrets first
-        api_key = st.secrets.get("GOOGLE_API_KEY", os.environ.get("GOOGLE_API_KEY"))
-        genai.configure(api_key=api_key)
-    except Exception as e:
-        print(f"Error configuring Generative AI: {e}")
-        API_KEY_CONFIGURED = False
+    genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
-# --- Data Loading and Preparation (More Robust) ---
-@st.cache_data
-def load_and_prep_data():
-    """
-    Loads, prepares, and caches the dataset from the /data folder.
-    This version has improved error handling for deployment.
-    """
+# --- DATA HANDLING ---
+
+def load_data():
+    """Loads and preprocesses the property dataset from a CSV file."""
     try:
-        # --- THIS IS THE FIX ---
-        # Build a reliable path to the data file.
-        # This works both locally and on Streamlit Cloud.
-        base_path = os.path.dirname(os.path.abspath(__file__))
-        data_file_path = os.path.join(base_path, '..', 'data', 'merged_property_dataset.csv')
-        
-        df = pd.read_csv(data_file_path)
-        
-        # Standardize column names for consistency
+        df = pd.read_csv('data/merged_property_dataset.csv')
+        # Pre-process columns for efficient searching
         df['city_lower'] = df['city'].str.lower()
         df['status_lower'] = df['possession_status'].str.lower()
         
         for col in ['bhk', 'price_cr', 'pincode', 'balcony', 'bathrooms']:
             df[col] = pd.to_numeric(df[col], errors='coerce')
-        
-        print("Dataset loaded and prepared successfully.")
         return df
     except FileNotFoundError:
-        # This error message will now appear in your Streamlit app if the file is missing
-        st.error(
-            "**Data file not found!** Please ensure you have a `/data` folder in your "
-            "GitHub repository with `merged_property_dataset.csv` inside it."
-        )
-        return None
-    except Exception as e:
-        st.error(f"An error occurred while loading the data: {e}")
+        # The main app will handle displaying the error to the user.
         return None
 
-# (The rest of your ai_core.py file remains the same)
-# ...
-# The functions parse_query_with_context, generate_summary, etc. are unchanged.
-# ...
+# --- AI & SEARCH LOGIC ---
+
+def parse_query_with_context(chat_history, last_filters):
+    """
+    Uses the Gemini API to parse a user's query into structured search filters,
+    maintaining the context of the conversation.
+    """
+    if not API_KEY_CONFIGURED:
+        return {}
+
+    formatted_history = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
+
+    prompt = f"""
+    You are an expert real estate query parser. Your goal is to extract search filters from the user's latest message, using the conversation history and previous filters as context.
+
+    Previous Filters: {json.dumps(last_filters)}
+    Conversation History:
+    {formatted_history}
+
+    Rules:
+    - From the LATEST user message, extract new information.
+    - If a user provides a new value (e.g., a new city), overwrite the old one.
+    - If a user adds a new filter (e.g., a budget), add it to existing filters.
+    - Budget: "between X and Y Cr" -> budget_min_cr: X, budget_max_cr: Y. "under Y Cr" -> budget_max_cr: Y.
+    - ALWAYS return a value for every field, using the previous filter's value if it hasn't changed.
+
+    Call the `find_properties` function with the complete, updated set of filters.
+    """
+    
+    extraction_schema = {
+        "name": "find_properties", "description": "Extracts filters for a property search.",
+        "parameters": {
+            "type": "OBJECT", "properties": {
+                "city": {"type": "STRING"}, "bhk_list": {"type": "ARRAY", "items": {"type": "NUMBER"}},
+                "budget_min_cr": {"type": "NUMBER"}, "budget_max_cr": {"type": "NUMBER"},
+                "status_list": {"type": "ARRAY", "items": {"type": "STRING"}}
+            }, "required": ["city", "bhk_list", "budget_min_cr", "budget_max_cr", "status_list"]
+        }
+    }
+
+    try:
+        model = genai.GenerativeModel(model_name="gemini-2.5-flash", tools=[extraction_schema])
+        response = model.generate_content(prompt)
+        
+        if response.candidates and response.candidates[0].content.parts[0].function_call:
+            raw_filters = response.candidates[0].content.parts[0].function_call.args
+            
+            # Sanitize the AI's response to prevent JSON serialization errors
+            sanitized_filters = {}
+            for key, value in raw_filters.items():
+                sanitized_filters[key] = list(value) if hasattr(value, '__iter__') and not isinstance(value, str) else value
+            return sanitized_filters
+    except Exception as e:
+        print(f"AI parsing error: {e}")
+    return {}
+
+def search_properties(df, filters):
+    """Filters the master DataFrame based on the extracted criteria."""
+    if df is None or not filters:
+        return pd.DataFrame()
+    
+    results = df.copy()
+    
+    if city := filters.get('city'):
+        results = results[results['city_lower'] == city.lower()]
+    if bhk_list := filters.get('bhk_list'):
+        results = results[results['bhk'].isin([float(b) for b in bhk_list])]
+    if budget_min := filters.get('budget_min_cr'):
+        results = results[results['price_cr'] >= budget_min]
+    if budget_max := filters.get('budget_max_cr'):
+        results = results[results['price_cr'] <= budget_max]
+        
+    return results
+
+def generate_summary(user_query, results_df):
+    """Generates a grounded, natural language summary of the search results."""
+    if not API_KEY_CONFIGURED or results_df.empty:
+        return "Here are the properties I found based on your search criteria."
+
+    prompt = f"""
+    A user asked: "{user_query}". I found some properties. Here is a sample:
+    {results_df.head(3).to_json(orient='records')}
+    Write a 2-3 sentence summary. CRITICAL: Do NOT mention the total number of properties found. Just describe what you see.
+    """
+    try:
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        print(f"Summary generation failed: {e}")
+        return "Here are the properties I found based on your search."
 
