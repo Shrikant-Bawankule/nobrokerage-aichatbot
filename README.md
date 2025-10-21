@@ -149,6 +149,9 @@ GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 * Ensure `.env` variables are properly configured using platform secrets.
 * Keep the dataset lightweight for fast filtering performance.
 
+
+<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/8d1ee8d0-8f36-46ba-8b60-7be54076cdfc" />
+
 ---
 
 ## 🔒 Privacy & Ethical Use
