@@ -6,7 +6,7 @@
 
 ## 🚀 Live Demo
 
-👉 *Add your deployed Streamlit app link here once available.*
+https://nobrokerage-aichatbot.streamlit.app/
 
 ---
 
