@@ -152,7 +152,7 @@ def display_property_card(card_data, container):
         sub_cols = st.columns(3)
         sub_cols[0].metric("Price", card_data.get('price_formatted', 'N/A'))
         sub_cols[1].metric("BHK", f"{int(card_data.get('bhk', 0))}")
-        sub_cols[2].metric("Balconies", f {int(card_data.get('balcony', 0))}")
+        sub_cols[2].metric("Balconies", f" {int(card_data.get('balcony', 0))}")
 
         status = card_data.get('possession_status', 'N/A')
         if "Ready" in status:
