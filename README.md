@@ -1,4 +1,4 @@
-# 🏠 NoBroker.com — AI-Powered Property Search
+#  NoBrokerage.com — AI-Powered Property Search
 
 > **An intelligent conversational property search assistant built with Streamlit and Google Gemini.** This project demonstrates how natural language queries can be transformed into precise property searches using AI and a local dataset.
 
@@ -29,7 +29,7 @@ This project represents an **AI-driven property search assistant** that allows u
 | Layer               | Tool                                 | Justification                                                                                 |
 | :------------------ | :----------------------------------- | :-------------------------------------------------------------------------------------------- |
 | **Frontend / App**  | Streamlit                            | Enables rapid development of interactive, data-centric web apps in Python.                    |
-| **AI / NLP Engine** | Google Gemini API (gemini-1.5-flash) | Advanced large language model capable of understanding and structuring complex human queries. |
+| **AI / NLP Engine** | Google Gemini API (gemini-2.5-flash) | Advanced large language model capable of understanding and structuring complex human queries. |
 | **Data Layer**      | Pandas DataFrame                     | Efficient in-memory data filtering and manipulation for local CSV datasets.                   |
 | **Language**        | Python                               | Provides seamless integration between AI, data processing, and UI components.                 |
 
@@ -119,7 +119,7 @@ Your application will open in the default web browser.
 # Copy this file to .env and replace with your actual key
 GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 # Optional: specify Gemini model
-# GEMINI_MODEL="gemini-1.5-flash"
+# GEMINI_MODEL="gemini-2.5-flash"
 ```
 
 ---
@@ -141,16 +141,6 @@ GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 2. Filters are validated and applied to the Pandas DataFrame.
 3. Matching results are displayed via Streamlit cards.
 4. Gemini generates a concise summary (e.g., pricing trends, key localities).
-
----
-
-## 🧰 Troubleshooting
-
-| Issue                   | Possible Solution                                                          |
-| ----------------------- | -------------------------------------------------------------------------- |
-| No results showing      | Check dataset columns and ensure data types (price, bedrooms) are numeric. |
-| Gemini API error        | Verify `GOOGLE_API_KEY` and ensure correct model configuration.            |
-| Streamlit not rendering | Update Streamlit to the latest stable version.                             |
 
 ---
 
@@ -188,16 +178,8 @@ GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 
 ---
 
-## 🪪 License
-
-Specify your preferred license here (e.g., MIT, Apache 2.0) depending on your distribution requirements.
-
----
 
 ## 🏁 Conclusion
 
-The **NoBroker.com AI-Powered Property Search** is a proof-of-concept that integrates AI, data analysis, and modern UI frameworks to revolutionize how users explore real estate listings. By combining **Google Gemini’s conversational intelligence** with **Streamlit’s interactivity**, this project demonstrates how data-driven, user-friendly applications can deliver smart, human-like search experiences.
+The **NoBrokerage.com AI-Powered Property Search** is a proof-of-concept that integrates AI, data analysis, and modern UI frameworks to revolutionize how users explore real estate listings. By combining **Google Gemini’s conversational intelligence** with **Streamlit’s interactivity**, this project demonstrates how data-driven, user-friendly applications can deliver smart, human-like search experiences.
 
----
-
-> **GitHub Repository:** *Add your GitHub link here once ready.*
