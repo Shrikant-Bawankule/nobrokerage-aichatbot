@@ -1,116 +1,203 @@
-# nobrokerage-aichatbot
-AI-powered chat interface for NoBrokerage.com property search
+# 🏠 NoBroker.com — AI-Powered Property Search
 
+> **An intelligent conversational property search assistant built with Streamlit and Google Gemini.** This project demonstrates how natural language queries can be transformed into precise property searches using AI and a local dataset.
 
-NoBroker.com AI-Powered Property Search
+---
 
-This project is an intelligent, conversational chat interface built with Streamlit and Google Gemini. It allows users to search for properties using natural language queries, understands follow-up questions to refine the search, and displays results in a clean, user-friendly interface.
+## 🚀 Live Demo
 
-Live Demo: [Link to your deployed Streamlit App will go here]
+👉 *Add your deployed Streamlit app link here once available.*
 
-🎯 Core Features
+---
 
-Natural Language Understanding: Parses complex queries like "2BHK in Pune between 1 and 2 Cr" to extract precise search filters.
+## 📘 Project Overview
 
-Conversational Context: Remembers the previous search to understand follow-up questions (e.g., after asking for "flats in Mumbai," a follow-up of "under 3 Cr" refines the original search).
+This project represents an **AI-driven property search assistant** that allows users to interact naturally with the system — as they would with a human agent. It understands follow-up questions, refines previous searches, and displays clean, data-driven results.
 
-Dynamic Data Search: Filters a local CSV dataset in real-time using Pandas.
+### 🔑 Core Functionalities
 
-AI-Generated Summaries: Uses the Gemini API to provide helpful, grounded summaries of the search results without revealing sensitive counts.
+* **Natural Language Understanding:** Extracts structured search filters from free-form user input (e.g., “2BHK in Pune between 1 and 2 Cr”).
+* **Conversational Context Awareness:** Understands follow-up refinements such as “under 3 Cr” after a previous search.
+* **Dynamic Data Filtering:** Filters property listings from a local CSV dataset in real-time using Pandas.
+* **AI-Generated Summaries:** Uses the Gemini API to summarize the search results with relevant insights.
+* **Modern UI:** A responsive and user-friendly Streamlit interface featuring interactive property cards and a sidebar filter system.
 
-Polished UI: A clean, attractive interface built with Streamlit, featuring a sidebar and appealing, component-based property cards.
+---
 
-⚙️ Tech Stack
+## ⚙️ Tech Stack
 
-Layer
+| Layer               | Tool                                 | Justification                                                                                 |
+| :------------------ | :----------------------------------- | :-------------------------------------------------------------------------------------------- |
+| **Frontend / App**  | Streamlit                            | Enables rapid development of interactive, data-centric web apps in Python.                    |
+| **AI / NLP Engine** | Google Gemini API (gemini-1.5-flash) | Advanced large language model capable of understanding and structuring complex human queries. |
+| **Data Layer**      | Pandas DataFrame                     | Efficient in-memory data filtering and manipulation for local CSV datasets.                   |
+| **Language**        | Python                               | Provides seamless integration between AI, data processing, and UI components.                 |
 
-Tool
+---
 
-Justification
+## 🧠 Architecture Overview
 
-App
+1. **User Input:** The user types a query like *“3BHK in Mumbai under 2 Cr”*.
+2. **Gemini Processing:** The query is sent to Gemini to extract structured filters such as city, price range, and property type.
+3. **Data Filtering:** Pandas applies these filters on the local dataset (`merged_property_dataset.csv`).
+4. **AI Summary:** Gemini generates a human-readable summary of the filtered results.
+5. **UI Rendering:** Streamlit displays the results as interactive property cards, updating dynamically as queries change.
 
-Streamlit
+---
 
-Chosen for its speed in building interactive, data-centric web apps directly in Python.
+## 📂 Project Structure
 
-AI / NLP
-
-Google Gemini API (gemini-1.5-flash)
-
-A powerful LLM used for its advanced function-calling (filter extraction) and text generation capabilities.
-
-Data
-
-Pandas DataFrame
-
-The ideal choice for loading and filtering the provided CSV data efficiently in memory.
-
-Language
-
-Python
-
-The industry standard for AI and data science, allowing for seamless integration of all components.
-
-🚀 How to Run Locally
-
-1. Clone the Repository
-
-git clone [your-github-repo-url]
-cd [your-repo-name]
-
-
-2. Create the /data Folder
-
-In the main project folder, create a new folder named data.
-
-Place your merged_property_dataset.csv file inside this data folder.
-
-3. Set Up a Virtual Environment
-
-python -m venv venv
-# On Windows
-venv\Scripts\activate
-# On macOS/Linux
-source venv/bin/activate
-
-
-4. Install Dependencies
-
-pip install -r requirements.txt
-
-
-5. Set Up Your Environment Variables
-
-Create a new file named .env in the root of the project.
-
-Copy the contents of .env.example into it.
-
-Add your Google AI (Gemini) API key to the .env file:
-
-GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
-
-
-6. Run the Streamlit App
-
-streamlit run app.py
-
-
-The application should now be running in your web browser!
-
-📂 Final Project Structure
-
+```
 .
 ├── data/
 │   └── merged_property_dataset.csv
-├── 📄 .env.example
-├── 📄 README.md
-├── 📄 app.py
-└── 📄 requirements.txt
+├── .env.example
+├── app.py
+├── requirements.txt
+└── README.md
+```
 
+---
 
-🧰 Submission Details
+## 💻 Setup Instructions
 
-GitHub Repository: This repository contains all the necessary code and documentation.
+Follow these steps to run the application locally:
 
-Usernames for Sharing: Prathameshzad, batty-sk
+### 1️⃣ Clone the Repository
+
+```bash
+git clone [your-github-repo-url]
+cd [your-repo-name]
+```
+
+### 2️⃣ Prepare the Dataset
+
+Create a new folder named `data` in the root directory and place your dataset file inside it:
+
+```
+data/
+└── merged_property_dataset.csv
+```
+
+### 3️⃣ Set Up a Virtual Environment
+
+```bash
+python -m venv venv
+# On Windows
+env\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
+```
+
+### 4️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5️⃣ Configure Environment Variables
+
+Create a new `.env` file in the project root and add your Google API key:
+
+```env
+GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
+```
+
+### 6️⃣ Run the Application
+
+```bash
+streamlit run app.py
+```
+
+Your application will open in the default web browser.
+
+---
+
+## 🧾 Example `.env.example`
+
+```env
+# Copy this file to .env and replace with your actual key
+GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
+# Optional: specify Gemini model
+# GEMINI_MODEL="gemini-1.5-flash"
+```
+
+---
+
+## 🧩 Example Queries Supported
+
+| User Query                                | AI Interpretation                                      |
+| ----------------------------------------- | ------------------------------------------------------ |
+| “2BHK in Pune between 60L and 1.2Cr”      | City = Pune, Bedrooms = 2, Price Range = 60L–1.2Cr     |
+| “Flats in Mumbai under 3Cr near Andheri”  | City = Mumbai, Locality = Andheri, Max Price = 3Cr     |
+| “Furnished 3BHK in Bangalore”             | City = Bangalore, Bedrooms = 3, Furnishing = Furnished |
+| Follow-up: “Show only ready-to-move ones” | Adds possession_status = Ready to Move                 |
+
+---
+
+## 🧠 AI Workflow Summary
+
+1. Gemini model extracts structured filters from natural language.
+2. Filters are validated and applied to the Pandas DataFrame.
+3. Matching results are displayed via Streamlit cards.
+4. Gemini generates a concise summary (e.g., pricing trends, key localities).
+
+---
+
+## 🧰 Troubleshooting
+
+| Issue                   | Possible Solution                                                          |
+| ----------------------- | -------------------------------------------------------------------------- |
+| No results showing      | Check dataset columns and ensure data types (price, bedrooms) are numeric. |
+| Gemini API error        | Verify `GOOGLE_API_KEY` and ensure correct model configuration.            |
+| Streamlit not rendering | Update Streamlit to the latest stable version.                             |
+
+---
+
+## 🧭 Deployment Notes
+
+* Can be deployed on **Streamlit Cloud**, **Render**, or **Vercel**.
+* Ensure `.env` variables are properly configured using platform secrets.
+* Keep the dataset lightweight for fast filtering performance.
+
+---
+
+## 🔒 Privacy & Ethical Use
+
+* The app only processes local CSV data. No personal user data is stored.
+* Gemini is used for understanding queries and summarizing results, not for storing or tracking data.
+* Summaries are generated responsibly without exposing internal dataset statistics.
+
+---
+
+## 📈 Future Enhancements
+
+* Add geolocation-based search (distance filters)
+* Implement caching for faster query responses
+* Allow export of shortlisted properties as CSV or PDF
+* Integrate authentication for personalized experiences
+
+---
+
+## 🤝 Contributors
+
+| Name               | GitHub Username  |
+| ------------------ | ---------------- |
+| Prathameshzad      | `@Prathameshzad` |
+| Shrikant Bawankule | `@batty-sk`      |
+
+---
+
+## 🪪 License
+
+Specify your preferred license here (e.g., MIT, Apache 2.0) depending on your distribution requirements.
+
+---
+
+## 🏁 Conclusion
+
+The **NoBroker.com AI-Powered Property Search** is a proof-of-concept that integrates AI, data analysis, and modern UI frameworks to revolutionize how users explore real estate listings. By combining **Google Gemini’s conversational intelligence** with **Streamlit’s interactivity**, this project demonstrates how data-driven, user-friendly applications can deliver smart, human-like search experiences.
+
+---
+
+> **GitHub Repository:** *Add your GitHub link here once ready.*
