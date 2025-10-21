@@ -130,7 +130,6 @@ GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 | ----------------------------------------- | ------------------------------------------------------ |
 | “2BHK in Pune between 60L and 1.2Cr”      | City = Pune, Bedrooms = 2, Price Range = 60L–1.2Cr     |
 | “Flats in Mumbai under 3Cr near Andheri”  | City = Mumbai, Locality = Andheri, Max Price = 3Cr     |
-| “Furnished 3BHK in Bangalore”             | City = Bangalore, Bedrooms = 3, Furnishing = Furnished |
 | Follow-up: “Show only ready-to-move ones” | Adds possession_status = Ready to Move                 |
 
 ---
@@ -146,7 +145,7 @@ GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 
 ## 🧭 Deployment Notes
 
-* Can be deployed on **Streamlit Cloud**, **Render**, or **Vercel**.
+* Deployed on **Streamlit Cloud**
 * Ensure `.env` variables are properly configured using platform secrets.
 * Keep the dataset lightweight for fast filtering performance.
 
@@ -166,15 +165,6 @@ GOOGLE_API_KEY="YOUR_API_KEY_GOES_HERE"
 * Implement caching for faster query responses
 * Allow export of shortlisted properties as CSV or PDF
 * Integrate authentication for personalized experiences
-
----
-
-## 🤝 Contributors
-
-| Name               | GitHub Username  |
-| ------------------ | ---------------- |
-| Prathameshzad      | `@Prathameshzad` |
-| Shrikant Bawankule | `@batty-sk`      |
 
 ---
 
